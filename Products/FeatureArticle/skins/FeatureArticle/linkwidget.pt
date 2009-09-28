@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="rhaptos">
+
+  <body>
+
+    <span class="field" metal:define-macro="view">
+     <metal:block define-slot="widget_label">
+     </metal:block>
+      <metal:use use-macro="here/widgets/field/macros/view">
+	<metal:fill metal:fill-slot="widget_view"
+	  tal:define="value python:accessor()">
+	  <a tal:attributes="href value/url" tal:content="value/title">[click]</a>
+	</metal:fill>
+      </metal:use>
+    </span>
+
+    <metal:define define-macro="edit">
+    <metal:use use-macro="here/widgets/field/macros/edit">
+     <metal:fill metal:fill-slot="widget_body"
+                 tal:define="value python:accessor()">
+	  <div i18n:translate="text_title_header_and_input">
+	    Title: <span i18n:name="url_input"><input type="text" name="fieldname" 
+                    tal:attributes="value value/title; name string:${fieldName}.title:record;"></span>
+	  </div>
+	  <div i18n:translate="text_url_header_and_input">
+	    URL: <span i18n:name="url_input"><input type="text" name="fieldName"
+                   tal:attributes="value value/url; name string:${fieldName}.url:record;" /></span>
+	  </div>
+     </metal:fill>
+    </metal:use>
+    </metal:define>
+
+  </body>
+
+</html>

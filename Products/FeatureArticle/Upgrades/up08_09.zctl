@@ -1,0 +1,97 @@
+from Products.CMFCore.tests.base.security import AnonymousUser, OmnipotentUser
+from AccessControl.SecurityManagement import newSecurityManager
+#user = OmnipotentUser().__of__(app)
+user = app.acl_users.getUser('brianman')
+newSecurityManager(None, user)
+
+# Ticket 9319 - adding two new folders to feed the Spotlight portlet
+
+print "Adding the Announcements and Major Announcements folders for the portlet Spotlight ..."
+
+# create the announcements and major-announcement folders
+app.plone.manage_addFolder('announcements', 'Announcements')
+app.plone.manage_addFolder('major-announcement', 'Major Announcement')
+
+print "Moving the Connexions Consortium announcement into the Announcements folder ..."
+
+# move the Connexions Consortium announcement into the Announcements folder
+try:
+    infoCut = app.plone.manage_cutObjects(["connexions-consortium"])
+    print "successfully cut the connexions-consortium object"
+    app.plone.announcements.manage_pasteObjects(infoCut)
+    print "successfully paste the connexions-consortium object into the announcements folder"
+except:
+    # paste works but throws an exception wrt the missing REQUEST object
+    pass
+
+# Ticket 9161 - older UserFeedback objects need to be recreated with newer Plone
+
+print "Upgrading User Feedback objects ..."
+
+userFeedbacks = app.plone.feedback.listFolderContents()
+
+iUserFeedbackTotal = len(userFeedbacks)
+iUserFeedbackNeedsUpgrade = 0
+iUserFeedbackUpgraded = 0
+
+for userFeedback in userFeedbacks:
+    portrait = userFeedback.getField('portrait')
+    if not hasattr(portrait, 'pil_resize_algo'):
+        iUserFeedbackNeedsUpgrade += 1
+
+        # remember all of the UserFeedback field values
+        id               = userFeedback.getId()
+        title            = userFeedback.Title()
+        email            = userFeedback.getEmail()
+        location         = userFeedback.getLocation()
+        occupation       = userFeedback.getOccupation()
+        referrer         = userFeedback.getReferrer()
+        description      = userFeedback.getRawDescription()
+        portrait         = userFeedback.getPortrait()
+        quote_permission = userFeedback.getQuote_permission()
+        name_permission  = userFeedback.getName_permission()
+        image_permission = userFeedback.getImage_permission()
+
+        # delete the UserFeedback object
+        app.plone.feedback.manage_delObjects([id])
+
+        # recreate a new, unitialized UserFeedback object
+        app.plone.feedback.invokeFactory('UserFeedback', id)
+
+        # repopulate the UserFeedback field values
+        newUserFeedback = app.plone.feedback[id]
+        newUserFeedback.setTitle(title)
+        newUserFeedback.setEmail(email)
+        newUserFeedback.setLocation(location)
+        newUserFeedback.setOccupation(occupation)
+        newUserFeedback.setReferrer(referrer)
+        newUserFeedback.setDescription(description)
+        newUserFeedback.setPortrait(portrait)
+        newUserFeedback.setQuote_permission(quote_permission)
+        newUserFeedback.setName_permission(name_permission)
+        newUserFeedback.setImage_permission(image_permission)
+
+        newPortrait = userFeedback.getField('portrait')
+        if not hasattr(newPortrait, 'pil_resize_algo'):
+            iUserFeedbackUpgraded += 1
+            print "\tPortrait for user '%s' has been upgraded to support PIL." % newUserFeedback.getId()
+        else:
+            print "\tPortrait for user '%s' has failed in upgrading to support PIL." % newUserFeedback.getId()
+
+print "%d of %d User Feedback objects need to be upgraded." % (iUserFeedbackNeedsUpgrade,iUserFeedbackTotal)
+print "%d of %d User Feedback objects have been upgraded." % (iUserFeedbackUpgraded,iUserFeedbackNeedsUpgrade)
+
+##############################################################################
+#  remove custom portlet_spotlights.  this should be a temporary, since
+#  portlet no longer exist on the live servers.
+from Products.CMFCore.utils import getToolByName
+from zExceptions import BadRequest
+skins_tool = getToolByName(app.plone, 'portal_skins')
+try:
+    skins_tool.custom.manage_delObjects('portlet_spotlights')
+except BadRequest:
+    pass
+##############################################################################
+
+import transaction; transaction.commit()
+print "transaction complete"

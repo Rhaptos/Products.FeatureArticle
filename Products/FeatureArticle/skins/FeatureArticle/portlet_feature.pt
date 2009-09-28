@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="rhaptos">
+
+  <body>
+
+    <!-- The Featured article box -->
+    <div metal:define-macro="portlet" class="portletContainer"
+                  tal:define="pobj context/portal_url/getPortalObject;
+                              ppath pobj/getPhysicalPath;
+                              features python:here.portal_catalog(portal_type='FeatureArticle',
+                                                                  path='/'.join(ppath+('features',)),
+                                                                  sort_on='Date',
+                                                                  sort_order='reverse',
+                                                                  review_state='published')"
+                  tal:condition="features">
+
+      <dl class="portlet" id="portlet-feature" >
+
+        <dt class="portletHeader">
+          <span class="portletTopLeft"></span>
+          <span i18n:translate="box_heading_spotlight" 
+            metal:define-slot="title">Spotlight</span>
+          <span class="portletTopRight"></span>
+        </dt>
+
+	<dd class="portletItem odd"
+            tal:define="reseed  python:True or modules['random'].jumpahead(314159);
+                        feature python:modules['random'].choice(features).getObject();">
+          <h3>Featured author</h3>
+          <img tal:condition="feature/portrait | nothing" 
+            tal:replace="structure python:feature.portrait.tag(css_class='photo')" />
+          <tal:blurb-in tal:replace="structure feature/description">[blah]</tal:blurb-in>
+          <p class="more"><a tal:attributes="href feature/absolute_url"
+              i18n:translate="label_feature_read_more">Read more...</a></p>
+
+          <ul tal:define="url1 feature/seealso1/url | nothing;
+                          url2 feature/seealso2/url | nothing"
+            tal:condition="python:url1 or url2">
+            <li tal:condition="feature/seealso1/url">
+              <a tal:attributes="href feature/seealso1/url">
+                <span tal:content="feature/seealso1/title">[click]</span>
+              </a>
+            </li>
+
+            <li tal:condition="feature/seealso2/url">
+              <a tal:attributes="href feature/seealso2/url">
+                <span tal:content="feature/seealso2/title">[click]</span>
+              </a>
+            </li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
+  </body>
+
+</html>
+

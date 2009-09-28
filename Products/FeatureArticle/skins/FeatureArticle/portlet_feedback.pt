@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="rhaptos">
+
+  <body>
+
+    <!-- The e-mailmag box -->
+    <div metal:define-macro="portlet" class="portletContainer"
+                  tal:define="feedback python:here.portal_catalog(portal_type='UserFeedback', review_state='published');
+                              results python:[f for f in feedback if f.getObject().getPortrait()]"
+                  tal:condition="results">
+
+      <dl class="portlet" id="portlet-feedback">
+
+        <dt class="portletHeader">
+          <span class="portletTopLeft"></span>
+          <span i18n:translate="box_heading_feedback"
+            metal:define-slot="title">e-Mailbag</span>
+          <span class="portletTopRight"></span>
+        </dt>
+
+        <dd class="portletItem odd"
+            tal:define="reseed   python:True or modules['random'].jumpahead(314159);
+                        feedback python:modules['random'].choice(results).getObject();">
+            <h3>User feedback</h3>
+            <img tal:condition="feedback/portrait | nothing" 
+              tal:replace="structure python:feedback.portrait.tag(css_class='photo')" />
+            <tal:blurb-in tal:replace="structure feedback/description">[blah]</tal:blurb-in>
+            <div style="text-align:right">&mdash;<span tal:replace="feedback/title">Name</span></div>
+        </dd>
+
+        <dd class="portletMore">
+          <strong><a href="/feedback"
+              i18n:translate="label_more_feedback">More User Feedback...</a></strong>
+
+          <span class="portletBottomLeft"></span>
+          <span class="portletBottomRight"></span>
+
+        </dd>
+      </dl>
+    </div>
+  </body>
+
+</html>
+

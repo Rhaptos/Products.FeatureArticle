@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="rhaptos">
+
+  <body>
+
+    <!-- The Featured content box -->
+    <div metal:define-macro="portlet" class="portletContainer"
+                  tal:define="pobj context/portal_url/getPortalObject;
+                              ppath pobj/getPhysicalPath;
+                              features python:here.portal_catalog(portal_type='FeatureArticle',
+                                                                  path='/'.join(ppath+('featureContent',)),
+                                                                  sort_on='getObjPositionInParent',
+                                                                  review_state='published')[:3]"
+                  tal:condition="features">
+
+      <dl class="portlet" id="portlet-feature-content" >
+        
+        <dt class="portletHeader">
+          <span class="portletTopLeft"></span>
+          <span i18n:translate="box_heading_featured_content">Featured Content</span>
+          <span class="portletTopRight"></span>
+        </dt>
+
+        <tal:loop repeat="brain features">
+          <dd class="portletItem odd" 
+            tal:define="feature brain/getObject">
+            <h3><a href="#" tal:attributes="href feature/seealso1/url" tal:content="feature/Title"></a></h3>
+	    <a href="#" tal:attributes="href feature/seealso1/url">
+              <img tal:condition="feature/portrait | nothing" 
+                tal:replace="structure python:feature.portrait.tag(css_class='photo')" />
+            </a>
+	    <tal:blurb-in tal:replace="structure feature/description">[blah]</tal:blurb-in>
+          </dd>
+        </tal:loop>
+        <dd class="portletItem odd">
+          <span class="portletBottomLeft"></span>
+          <span class="portletBottomRight"></span>
+        </dd>
+          
+      </dl>
+    </div>
+  </body>
+
+</html>

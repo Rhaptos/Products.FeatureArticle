@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="rhaptos">
+
+  <body>
+
+    <!-- Spoltlight Announcements -->
+    <div metal:define-macro="portlet"
+         class="portletContainer"
+         tal:define="pathPortal             context/portal_url/getPortalPath;
+                     pathMajorAnnouncements python:'/'.join((pathPortal,'major-announcement',));
+                     pathAnnouncements      python:'/'.join((pathPortal,'announcements',));
+                     majorAnnouncements     python:context.portal_catalog(portal_type='Document',
+                                                                          path=pathMajorAnnouncements,
+                                                                          review_state='published');
+                     announcements          python:context.portal_catalog(portal_type='Document',
+                                                                          path=pathAnnouncements,
+                                                                          review_state='published');
+                     gotMajorAnnouncement   python:len(majorAnnouncements)>0;
+                     gotAnnouncements       python:len(announcements)>0;
+                     reseed                 python:True or modules['random'].jumpahead(314159);
+                     announcement           python:gotMajorAnnouncement and majorAnnouncements[0] or
+                                                   modules['random'].choice(announcements);
+                     objAnnouncement        announcement/getObject;"
+         tal:condition="announcement">
+
+      <dl class="portlet" id="portlet-feedback">
+
+        <dt class="portletHeader">
+          <span class="portletTopLeft"></span>
+          <span i18n:translate="box_heading_feedback"
+            metal:define-slot="title">Spotlight</span>
+          <span class="portletTopRight"></span>
+        </dt>
+
+        <dd class="portletItem odd">
+            <h3 tal:content="objAnnouncement/title">Connexions Conference</h3>
+            <div tal:content="structure objAnnouncement/CookedBody">Name</div>
+        </dd>
+
+      </dl>
+    </div>
+  </body>
+
+</html>
+
