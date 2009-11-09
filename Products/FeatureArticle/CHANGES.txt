@@ -1,3 +1,10 @@
+FeatureArticle-0.10
+  - light-weight-branding (30 Oct 2009)
+    - added a link to Connexions Featured Content lens at the botom of the /featureContent page.
+    - re-glued the featurefolder_view page template which displays the feature content objects.
+    - reworked featurefolder_view.pt to include thumbnail images beside each featured article description.
+    - Added a "More Featured Content" link at the bottom of the portlet.
+
 FeatureArticle-0.9
   - content-actions-move (17 Aug 2009)
     - changed the portlet spotlight, rotate between Feature Authors, User Feedback and CNX Announcements.

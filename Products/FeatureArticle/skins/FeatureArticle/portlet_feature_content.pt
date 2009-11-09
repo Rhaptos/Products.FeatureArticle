@@ -35,11 +35,16 @@
 	    <tal:blurb-in tal:replace="structure feature/description">[blah]</tal:blurb-in>
           </dd>
         </tal:loop>
+        
         <dd class="portletItem odd">
           <span class="portletBottomLeft"></span>
           <span class="portletBottomRight"></span>
         </dd>
-          
+
+        <dd class="portletFooter">
+          <a  href="/featureContent">More Featured Content...</a>
+        </dd>
+
       </dl>
     </div>
   </body>
