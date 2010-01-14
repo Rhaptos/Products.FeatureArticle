@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="rhaptos"
+      metal:use-macro="here/main_template/macros/master">
+
+  <body>
+    <div metal:fill-slot="main">
+      
+      <h1 tal:content="here/title">[title]</h1>
+      <div class="field">
+	<img tal:condition="here/portrait | nothing" 
+             tal:replace="structure python:here.portrait.tag(css_class='photo')" />
+
+	<tal:comment tal:content="structure here/description">[blah]</tal:comment>
+
+      </div>
+    </div>  
+  </body>
+</html>
+

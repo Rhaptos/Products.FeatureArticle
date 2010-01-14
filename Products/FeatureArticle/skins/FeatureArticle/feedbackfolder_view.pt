@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="rhaptos"
+      metal:use-macro="here/main_template/macros/master">
+
+<head>
+<style metal:fill-slot="css_slot">
+.testimonial{
+clear: left;
+margin-bottom: 2em;
+}
+.name{
+font-weight: bold;
+text-align: right;
+}
+</style>
+</head>
+<body>
+
+    <div metal:fill-slot="main">
+
+      <h1 i18n:translate="heading_user_feedback">User feedback</h1>
+
+        <div id="description"
+             tal:content="structure here/Description"> description </div>
+      
+      <dl tal:define="objects python:here.objectValues('UserFeedback');">
+	<tal:block tal:repeat="obj objects">
+	  <div class="testimonial">
+	  <img tal:condition="obj/portrait | nothing" 
+		tal:replace="structure python:obj.portrait.tag(css_class='photo')" />
+	    <div tal:content="structure obj/description">[description]</div>
+	      <div class="name">
+	        &mdash;<span tal:content="obj/title">[name]</span>
+	     </div>
+	  </div>
+	</tal:block>
+      </dl>
+      <hr size="1" />
+      <p i18n:translate="text_feedback_instructions">
+	To send your feedback to Connexions, please e-mail us at
+        <a tal:attributes="href
+          string:mailto:${here/email_from_address}"  
+          tal:content="here/email_from_address" 
+          href="mailto:cnx@rice.edu"
+          i18n:name="mail_to_link">cnx@rice.edu</a>.
+        If you would like to report a problem, please
+        fill out a 
+        <span i18n:name="bug_report_link">
+          <a i18n:translate="label_bug_report"
+                  tal:attributes="href string:${portal_url}/bug_submit_form" href="/bug_submit_form">bug report</a></span>.
+      </p>
+      <p i18n:translate="text_questions_to_content_author">
+	For questions about the specific content of a course or a
+        module in Connexions, please use the link at the
+        bottom of the course or module page to send an e-mail to the content's author.
+      </p>
+    </div>
+  </body>
+</html>
+

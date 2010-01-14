@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="rhaptos"
+      metal:use-macro="here/main_template/macros/master">
+
+<body>
+
+    <div metal:fill-slot="main">
+
+      <h1 tal:content="here/title">[news]</h1>
+
+        <div id="description"
+             tal:content="structure here/Description"> description </div>
+
+      <dl tal:define="results python:here.portal_catalog(portal_type='FeatureArticle',
+                                                         sort_on='Date',
+                                                         sort_order='reverse',
+                                                         review_state='published')">
+        <tal:list tal:repeat="obj results">
+          <dt class='content'>
+            <a href="" tal:attributes="href obj/getURL">
+              <span tal:replace="python:test(obj.Title, obj.Title, obj.id)"> Extended Calendar Product </span></a> 	- <span tal:content="python:here.toLocalizedTime(obj.Date)">July 7, 08:11</span>
+          </dt>
+          <dd tal:define='featureArticle obj/getObject;'>
+            <p>
+              <img src="logo_thumb" class="photo"
+                   tal:define="image featureArticle/portrait;"
+                   tal:attributes="src image/absolute_url_path;"
+                   tal:condition="python:hasattr(featureArticle,'portrait')"/>
+              <span tal:content="structure python:test(obj.Description, obj.Description, '&nbsp;')"> description </span>
+            </p>
+          </dd>
+        </tal:list>
+
+        <dt class='content'>
+          <a href="/lenses/cnxorg/featured">Connexions Featured Content lens</a>
+        </dt>
+        <dd>
+          <p>
+            <img src="/lenses/cnxorg/featured/logo" class="photo"/>
+            <span>This lens contains exemplary content that has been featured on the Connexions home page. If you would like to submit your content for review for inclusion in this lens, please contact the Connexions community development team at <a href="mailto:community@cnx.org">community@cnx.org</a>.</span>
+          </p>
+        </dd>
+      </dl>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="rhaptos"
+      metal:use-macro="here/main_template/macros/master">
+
+  <body>
+    <metal:main metal:fill-slot="main">
+      
+      <h1 tal:content="here/title">[title]</h1>
+      <div class="field">
+	<img tal:condition="here/portrait | nothing" 
+             tal:replace="structure python:here.portrait.tag(css_class='photo')" />
+
+	<i>
+	  <tal:desc tal:replace="structure here/description">[blah]</tal:desc>
+	</i>
+
+	<hr size="1" />
+	<tal:body tal:replace="structure here/getBody">[blah]</tal:body>
+
+	<span class="label" i18n:translate="text_see_also">See also:</span>
+	<p tal:condition="here/seealso1/url">
+	  <a tal:attributes="href here/seealso1/url">
+	    <span tal:content="here/seealso1/title">[click]</span>
+	  </a>
+	</p>
+	
+	<p tal:condition="here/seealso2/url">
+	  <a tal:attributes="href here/seealso2/url">
+	    <span tal:content="here/seealso2/title">[click]</span>
+	  </a>
+	</p>
+	<p tal:define="parent here/getParentNode">
+	  <a tal:attributes="href parent/absolute_url">
+            <span tal:content='string:Other ${parent/title}'
+              i18n:translate="">Other Featured articles:</span>
+	  </a>
+	</p>
+
+      </div>
+    </metal:main>
+  </body>
+</html>
+

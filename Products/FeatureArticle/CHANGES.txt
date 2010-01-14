@@ -1,0 +1,42 @@
+FeatureArticle-0.10
+  - light-weight-branding (30 Oct 2009)
+    - added a link to Connexions Featured Content lens at the botom of the /featureContent page.
+    - re-glued the featurefolder_view page template which displays the feature content objects.
+    - reworked featurefolder_view.pt to include thumbnail images beside each featured article description.
+    - Added a "More Featured Content" link at the bottom of the portlet.
+
+FeatureArticle-0.9
+  - content-actions-move (17 Aug 2009)
+    - changed the portlet spotlight, rotate between Feature Authors, User Feedback and CNX Announcements.
+    - within each folder, pages rotated randomly
+    - option to provide "major announcement" to override the random selection between the three categories
+
+FeatureArticle-0.8
+  - remove 'portal_form' from tab URLs; it was long deprecated and finally removed at some point,
+    and now breaks the tabs if present. (Live data fixed by hand.)
+  - fix #4182: change hardcoded bug reporting URLs to portal_url relative bug_submit_form
+
+FeatureArticle-0.7
+  - upgrade to Plone 2.5
+  - Title accessor tweak
+
+FeatureArticle-0.6.1
+  - Fix reversal glitch
+
+FeatureArticle-0.6
+  - March 2007 site redesign (newlook)
+
+FeatureArticle-0.5
+  - i18n Translation Support
+
+FeatureArticle-0.4
+  - added 'Other <foo>' link to 'See Also:' block in feature_view.pt
+
+FeatureArticle-0.3
+  - altered feedbackfolder_view.pt to use here/email_from_address
+
+FeatureArticle-0.2
+  - Now works with (and requires) Plone2/Archetypes1.3
+
+FeatureArticle-0.1
+  - Initial release

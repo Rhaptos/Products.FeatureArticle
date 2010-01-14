@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="rhaptos">
+
+  <tal:comment replace="nothing">
+     Combined contents of portlet_feature and portlet_feedback.
+     On each page view, picks either feature or a feedback to show, and then
+     selects randomly from features/feedbacks just like the single portlets.
+  </tal:comment>
+
+  <body>
+    <!-- The spotlight box -->
+    <metal:define metal:define-macro="portlet">
+     <tal:choose
+        tal:define="pathPortal             context/portal_url/getPortalPath;
+                    pathMajorAnnouncements python:'/'.join((pathPortal,'major-announcement',));
+                    pathAnnouncements      python:'/'.join((pathPortal,'announcements',));
+                    majorAnnouncements     python:context.portal_catalog(portal_type='Document',
+                                                                         path=pathMajorAnnouncements,
+                                                                         review_state='published');
+                    announcements          python:context.portal_catalog(portal_type='Document',
+                                                                         path=pathAnnouncements,
+                                                                         review_state='published');
+                    gotMajorAnnouncement   python:len(majorAnnouncements)>0;
+                    gotAnnouncements       python:len(announcements)>0;
+                    reseed                 python:modules['random'].jumpahead(314159);
+                    whichPortlet           python:gotMajorAnnouncement and 'Announcement' or
+                                                  gotAnnouncements and modules['random'].choice(('UserFeedback','FeaturedAuthor','Announcement')) or
+                                                  modules['random'].choice(('UserFeedback','FeaturedAuthor'));">
+       <tal:when tal:condition="python:whichPortlet == 'UserFeedback'">
+        <metal:pull use-macro="context/portlet_feedback/macros/portlet">
+          <span metal:fill-slot="title">Spotlight</span>
+        </metal:pull>
+       </tal:when>
+
+       <tal:when tal:condition="python:whichPortlet == 'FeaturedAuthor'">
+        <metal:pull use-macro="context/portlet_feature/macros/portlet">
+          <span metal:fill-slot="title">Spotlight</span>
+        </metal:pull>
+       </tal:when>
+
+       <tal:when tal:condition="python:whichPortlet == 'Announcement'">
+        <metal:pull use-macro="context/portlet_announcement/macros/portlet">
+          <span metal:fill-slot="title">Spotlight</span>
+        </metal:pull>
+       </tal:when>
+     </tal:choose>
+    </metal:define>
+
+  </body>
+
+</html>
+
