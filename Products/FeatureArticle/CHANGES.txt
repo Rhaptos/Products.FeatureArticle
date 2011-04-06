@@ -1,3 +1,6 @@
+FeatureArticle-0.10.1
+  - put the license text in
+
 FeatureArticle-0.10
   - light-weight-branding (30 Oct 2009)
     - added a link to Connexions Featured Content lens at the botom of the /featureContent page.
