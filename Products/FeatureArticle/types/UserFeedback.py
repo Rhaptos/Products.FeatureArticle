@@ -7,7 +7,7 @@ from Products.Archetypes.public import StringField, TextField, ImageField, Boole
 from Products.Archetypes.public import StringWidget, TextAreaWidget, ImageWidget, SelectionWidget, BooleanWidget
 from Products.Archetypes.public import DisplayList
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore import permissions as CMFCorePermissions
 from countries import LOCATIONS
 
 REFERRERS = DisplayList((
@@ -109,4 +109,4 @@ class UserFeedback(BaseContent):
         return self.getText()
 
 
-registerType(UserFeedback)
+registerType(UserFeedback,'FeatureArticle')

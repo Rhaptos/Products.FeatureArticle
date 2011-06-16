@@ -6,7 +6,7 @@ from Products.Archetypes.public import BaseContent
 from Products.Archetypes.public import StringField, TextField, ImageField
 from Products.Archetypes.public import StringWidget, TextAreaWidget, ImageWidget
 
-from Products.CMFCore import CMFCorePermissions
+from Products.CMFCore import permissions as CMFCorePermissions
 
 from Products.FeatureArticle.Field import LinkField
 from Products.FeatureArticle.Widget import LinkWidget
@@ -94,4 +94,4 @@ class FeatureArticle(BaseContent):
         return self.getText()
 
 
-registerType(FeatureArticle)
+registerType(FeatureArticle,'FeatureArticle')
